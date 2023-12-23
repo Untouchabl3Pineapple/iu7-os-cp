@@ -1,0 +1,668 @@
+\documentclass{bmstu}
+
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Настройка стиля листингов
+% \lstset{
+%   basicstyle=\ttfamily\footnotesize,
+%   language=SQL, % Язык программирования
+%   backgroundcolor=\color{white}, % Цвет фона
+%   commentstyle=\color{green}, % Стиль комментариев
+%   keywordstyle=\color{blue}, % Стиль ключевых слов
+%   numberstyle=\tiny\color{black}, % Стиль номеров строк
+%   numbers=left, % Размещение номеров строк
+%   frame=single, % Обрамление листинга
+%   breaklines=true, % Разрыв длинных строк
+%   tabsize=4, % Размер табуляции
+% }
+
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize, % Основной стиль шрифта и размер
+    commentstyle=\color{green}, % Стиль комментариев
+    keywordstyle=\color{blue}, % Стиль ключевых слов
+    numbers=left, % Показывать номера строк слева
+    numbersep=3mm, % Отступ номеров строк
+    numberstyle=\scriptsize, % Размер номеров строк
+    breaklines=true, % Разрешить автоматический перенос строк
+    frame=single, % Отображать рамку вокруг листинга
+    rulecolor=\color{black}, % Цвет рамки
+    showstringspaces=false, % Не отображать пробелы в строках
+}
+
+\bibliography{lib.bib}
+
+\begin{document}
+
+\makecourseworktitle
+{Информатика и системы управления (ИУ)}
+{Программное обеспечение ЭВМ и информационные технологии (ИУ7)}
+{Разработка драйвера для настройки направления скроллинга USB-мыши}
+{И. О. Артемьев/ИУ7-75Б}
+{Н. Ю. Рязанова}
+{}
+{}
+{}
+
+\chapter*{РЕФЕРАТ}
+
+В рамках данной курсовой работы был разработан драйвер для настройки направления скроллинга USB-мыши.
+
+Ключевые слова: скроллинг, USB-мышь, драйвер.
+
+Рассчетно-пояснительная записка к курсовой работе содержит \begin{NoHyper}\pageref{LastPage}\end{NoHyper} страницы, \totfig~иллюстраций, 3 источника, 1 приложение.
+
+\clearpage
+
+\maketableofcontents
+
+% \chapter{Аналитическая часть}
+
+% Шифровальная машина <<Энигма>> состоит из трех основных частей:
+% \begin{itemize}
+%     \item роторы --- диски обладающие 26 гранями, где каждая грань представляла собой нумерацию английского алфавита;
+%     \item рефлектор --- статический механизм, позволящий машине также расшифровать текст;
+%     \item коммутатор --- набор парных шифров.
+% \end{itemize}
+
+% \section{Алгоритм работы машины}
+
+% На вход <<Энигме>> подается строка, которая разбивается на символы. 
+% Далее символ проходит через коммутационную панель, который меняет символ в соотвествии с настройкой.
+% После прохождения панели, символ проходит через три диска и попадает на рефлектор.
+% После работы рефлектора, символ отправляется обратно на диске и оканчательно шифруется через коммутатор.
+% Затем один ротор совершает оборот, если ротор обернулся 26 раз, то поворачивается следующий.
+
+% \section{Анализ залупы}
+
+\chapter*{ВВЕДЕНИЕ}
+\addcontentsline{toc}{chapter}{ВВЕДЕНИЕ}
+
+Разработка драйверов для устройств является важной составляющей в обеспечении правильной работы аппаратных средств и расширении функциональности компьютерных систем. Одним из таких устройств является USB-мышь, стандартное устройство в компьютерном арсенале, которое обеспечивает пользовательский интерфейс для взаимодействия с операционной системой.
+
+Одной из ключевых возможностей USB-мыши является скроллинг -- способ перемещения содержимого экрана вверх или вниз. Направление этого скроллинга может оказаться важным для конечного пользователя, и в различных сценариях использования может потребоваться переключение направления скроллинга в соответствии с предпочтениями пользователя или специфическими требованиями.
+
+Данная курсовая работа посвящена разработке драйвера для настройки направления скроллинга USB-мыши.
+\chapter{Аналитический раздел}
+
+\section{Постановка задачи}
+В соответствии с заданием на курсовую работу необходимо разработать драйвер для настройки направления скроллинга USB-мыши.
+
+Для решения поставленной задачи необходимо:
+
+\begin{itemize}
+    \item провести анализ основных принципов работы мыши;
+	\item провести анализ структуры драйвера мыши;
+	\item провести анализ существующих способов изменения направления скроллинга мыши.
+	\item разработать алгоритмы и структуру программного обеспечения;
+	\item провести анализ работы разработанного программного обеспечения.
+\end{itemize}
+
+
+\section{Анализ основных принципов работы USB-мыши}
+
+USB-мышь представляет собой устройство ввода, используемое для управления курсором на компьютерном экране. Она соединяется с компьютером через USB-порт и основана на использовании оптического или лазерного сенсора для определения движения. Этот сенсор сканирует поверхность, на которой находится мышь, и передает данные о движении курсора в операционную систему.
+
+Основными компонентами USB-мыши являются кнопки (обычно левая, правая и средняя) и колесо прокрутки. Она использует протоколы, такие как HID, для взаимодействия с компьютером и передачи информации о движении, нажатиях и вращении колеса. Эти данные интерпретируются операционной системой, что позволяет пользователям управлять курсором, выполнять клики и скроллинг.
+
+Технологии USB-мышей постоянно развиваются, добавляя новые функции, улучшая точность определения движения и обогащая возможности настройки для конечного пользователя. Эволюция включает в себя беспроводные соединения, расширенную функциональность кнопок и дополнительные опции скроллинга.
+
+Основные принципы работы USB-мыши лежат в основе ее функциональности как удобного и надежного устройства для управления компьютером, обеспечивая пользователю широкий спектр возможностей взаимодействия с интерфейсом и выполнения задач.
+
+\section{Анализ возможных типов драйвера}
+
+В операционных системах Unix/Linux существуют три типа драйверов:
+
+\begin{enumerate}
+	\item встроенные -- выполнение этих драйверов инициализируется при запуске системы;
+	\item драйверы, код которых поделен между ядром и специальной утилитой;
+	\item драйверы, реализованные как загружаемые модули ядра.
+\end{enumerate}
+
+Среди загружаемых модулей ядра выделяются HID-драйверы. HID (Human Interface Device) -- это один из наиболее часто используемых классов устройств USB. Он включает в себя устройства, предназначенные для взаимодействия пользователя с компьютером.
+
+Для изменения функциональности USB-мыши в системе Unix/Linux требуется разработать именно HID-драйвер. HID-драйверы специализируются на работе с устройствами класса HID, что позволяет изменять и настраивать функции и возможности устройств, таких как мыши, клавиатуры и другие устройства ввода, используемые для взаимодействия пользователя с компьютером.
+
+\section{Анализ алгоритма регистрации HID-драйвера в системе}
+
+Регистрация HID-драйвера подразумевает:
+
+\begin{enumerate}
+	\item заполнение структуры hid\_driver;
+	\item регистрация структуры в системе.
+\end{enumerate}
+
+Сначала требуется инициализировать поля структуры hid\_driver, представленной на листинге \ref{lst:hid}.
+
+\begin{lstlisting}[caption={struct hid\_driver}, label=lst:hid]
+struct hid_driver
+{
+    char *name;
+    const struct hid_device_id *id_table;
+    ...
+    int (*probe)(struct hid_device *dev, const struct hid_device_id *id);
+    void (*remove)(struct hid_device *dev);
+    ...
+    int (*raw_event)(struct hid_device *hdev, struct hid_report *report, u8 *data, int size);
+    ...
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item char *name -- это поле определяет имя драйвера. Имя драйвера представляет собой строку символов, идентифицирующую данный драйвер;
+	\item const struct hid\_device\_id *id\_table -- это поле указывает на таблицу идентификаторов устройств, для которых применяется данный драйвер. Эта таблица содержит информацию о поддерживаемых устройствах и их идентификаторах;
+	\item int (*probe)(struct hid\_device *dev, const struct hid\_device\_id *id) -- это указатель на функцию probe, которая вызывается при обнаружении нового устройства. Она инициализирует устройство и осуществляет его подключение к драйверу;
+	\item void (*remove)(struct hid\_device *dev) -- это указатель на функцию remove, которая вызывается при отключении устройства от драйвера. Она отвечает за корректное завершение работы с устройством;
+	\item int (*raw\_event)(struct hid\_device *hdev, struct hid\_report *report, u8 *data, int size) -- это указатель на функцию raw\_event, которая обрабатывает низкоуровневые события от устройства, такие как получение отчетов (reports) от устройства HID. Она разбирает полученные данные от устройства и выполняет необходимые действия в соответствии с протоколом работы HID-устройства.
+\end{itemize}
+
+Регистрация и дерегистрация драйвера в системе выполняется в макросах module\_init и module\_exit 
+с помощью функций hid\_register\_driver() и hid\_unregister\_driver(), которым передается адрес инициализированной 
+структуры struct hid\_driver.
+
+\section{Анализ способов изменения направления скроллинга мыши}
+
+Модификация дескриптора отчета (Report Descriptor Modification) и перехват сырых событий (Raw Event Interception) -- 
+это два подхода к изменению поведения USB-устройств, таких как мышь, с целью переопределения направления скроллинга.
+
+Модификация дескриптора отчета работает путем изменения формата данных, которые устройство отправляет компьютеру. 
+Это позволяет создать пользовательский дескриптор, что обеспечивает гибкость в настройке скроллинга.
+Замена отчетного дескриптора осуществляется с помощью поля report\_fixup в структуре драйвера \cite{ryazanov2023}, куда передается указатель на
+функцию для замены дескриптора. Пример замены отчетного дескриптора представлен на листинге \ref{lst:report}.
+
+\begin{lstlisting}[caption={Функция замены отчетного дескриптора}, label=lst:report]
+static u8* report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *rsize)
+{
+    *rsize = sizeof(my_rdesc);
+    return my_rdesc;
+}
+\end{lstlisting}
+
+Изменение данных в сырых событиях представляет собой метод модификации информации, получаемой от 
+устройства. Этот подход обладает высокой гибкостью, позволяя пользователю 
+настраивать скроллинг в соответствии с индивидуальными предпочтениями. Благодаря реализации на уровне 
+программного обеспечения, он обеспечивает относительно легкий доступ для пользователей. Изменение данных происходит
+с помощью поля raw\_event в структуре драйвера, куда передается указатель на функцию для обработки событий. Пример обработки
+событий скроллинга мыши представлен на листинге \ref{lst:mousehid}.
+\clearpage
+
+\begin{lstlisting}[caption={Функция обработки данных от устройства}, label=lst:mousehid]
+static int mouse_hid_input(struct hid_device* hdev, struct hid_report* report, u8* data, int size)
+{
+    struct mouse_sc* sc = hid_get_drvdata(hdev);
+
+    if (sc->is_natural_scrolling == 1 && size > 0) {
+        if (data[size - 1] == 0xFF) {
+            data[size - 1] = 0x01;
+        }
+        else if (data[size - 1] == 0x01) {
+            data[size - 1] = 0xFF;
+        }
+    }
+
+    return 0;
+}
+\end{lstlisting}
+
+Именно изменение данных в сырых событиях будет использоваться в качестве подхода для изменения направления скроллинга мыши, в виду своей простоты и эффективности реализации.
+
+\section{Вывод}
+В результате проведенного анализа было решено:
+\begin{itemize}
+	\item для выполнения задания разработать HID-драйвер, который должен быть реализован как загружаемый модуль ядра;
+	\item для изменения направления скроллинга мыши использовать изменение данных в сырых событиях.
+\end{itemize}
+
+\clearpage
+
+\chapter{Конструкторский раздел}
+
+\section{Диаграмма IDEF0}
+
+На рисунке \ref{img:idef0} приведена диаграмма состояний IDEF0 нулевого уровня,
+а на рисунке \ref{img:idef0_1} -- диграмма состояний IDEF0 первого уровня.
+
+\imgs{idef0}{h!}{0.55}{Диаграмма состояний IDEF0 нулевого уровня}
+\imgs{idef0_1}{h!}{0.35}{Диаграмма состояний IDEF0 первого уровня}
+
+\section{Инициализация структуры hid\_driver}
+
+Для создания HID-драйвера создается экземпляр структуры hid\_driver.
+Создание экзмепляра приведено на листинге \ref{lst:driverinit}.
+
+\clearpage
+\begin{lstlisting}[caption={Инициализация структуры hid\_driver}, label=lst:driverinit]
+static struct hid_driver mouse_driver = {
+    .name = "custom_mouse_driver",
+    .id_table = mouse_table,
+    .probe = mouse_probe,
+    .remove = mouse_disconnect,
+    .raw_event = mouse_hid_input,
+};
+\end{lstlisting}
+
+Для регистрации HID-драйвера используется функция hid\_register\_driver.
+
+
+\section{Структура для хранения информации о мыши}
+
+Для передачи данных, связанных с мышью, была создана структура mouse\_sc,
+приведенная на листинге \ref{lst:mousesc}.
+
+\begin{lstlisting}[caption={Структура mouse\_sc}, label=lst:mousesc]
+struct mouse_sc {
+    struct hid_device* hdev;
+    int is_natural_scrolling;
+};
+\end{lstlisting}
+
+Поля этой структуры:
+
+\begin{itemize}
+	\item hdev -- указатель на структуру устройства;
+	\item is\_natural\_scrolling -- флаг, указывающий на то, включен ли режим естественного скроллинга или нет.
+\end{itemize}
+
+\section{Алгоритм обработки сырых данных}
+На рисунке \ref{img:scrolling_alg} показана схема алгоритма обработки сырых данных для скроллинга.
+\imgs{scrolling_alg}{h!}{0.55}{Алгоритм обработки сырых данных}
+
+\clearpage
+% \section{Структура программного обеспечения}
+
+
+\chapter{Технологический раздел}
+
+
+\section{Выбор языка и среды программирования}
+
+В качестве языка программирования был выбран язык C \cite{c}, так как большая часть
+исходного кода ядра Linux, его модулей и драйверов написана на C.
+
+В качестве среды разработки была выбрана Visual Studio Code \cite{vscode} в связи с простотой
+и удобством использования.
+
+
+\section{Реализация парсинга настроечного файла}
+
+На листинге \ref{lst:settingsfile} представлена реализация парсинга настроечного файла.
+
+Функция проверяет установлен ли флаг is\_natural\_scrolling в файле настроек.
+На вход функции подается абсолютный путь к файлу, а на выходе возвращается распаршенное значение.
+
+\begin{lstlisting}[caption={Реализация функции парсинга настроечного файла}, label=lst:settingsfile]
+static int get_scrolling_value(const char* filepath)
+{
+    char settings[SETTINGS_SIZE];
+    struct file* file;
+    loff_t pos = 0;
+    int bytes_read;
+
+    file = filp_open(filepath, O_RDONLY, 0);
+    if (IS_ERR(file)) {
+        printk(KERN_ERR "file can't open\n");
+        return -ENOENT;
+    }
+
+    vfs_llseek(file, pos, SEEK_SET);
+    bytes_read = kernel_read(file, settings, sizeof(settings), &pos);
+    filp_close(file, NULL);
+
+    int is_natural_scrolling = -1;
+
+    if (bytes_read > 0) {
+        char* found = strstr(settings, "Natural scrolling: ");
+        if (found != NULL) {
+            found += strlen("Natural scrolling: ");
+            is_natural_scrolling = *found - '0';
+        }
+    }
+
+    printk(KERN_INFO "is_natural_scrolling: %d\n", is_natural_scrolling);
+
+    return is_natural_scrolling;
+}
+\end{lstlisting}
+
+\section{Реализация драйвера}
+
+На листинге \ref{lst:probe} представлена реализация функции probe.
+
+\begin{lstlisting}[caption={Реализация функции probe}, label=lst:probe]
+static int mouse_probe(struct hid_device* hdev, const struct hid_device_id* id)
+{
+    int ret;
+    struct mouse_sc* sc;
+
+    sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
+    if (sc == NULL) {
+        return -ENOMEM;
+    }
+
+    sc->hdev = hdev;
+    sc->is_natural_scrolling = get_scrolling_value(SETTINGS_PATH);
+
+    hid_set_drvdata(hdev, sc);
+
+    ret = hid_parse(hdev);
+    if (ret)
+    {
+        hid_err(hdev, "parse faild\n");
+        return ret;
+    }
+
+    ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+    if (ret) {
+        hid_err(hdev, "hw start failed\n");
+        return ret;
+    }
+
+    printk(KERN_WARNING "Connect driver\n");
+
+    return 0;
+}
+\end{lstlisting}
+
+\clearpage
+На листинге \ref{lst:remove} представлена реализация функции remove.
+
+\begin{lstlisting}[caption={Реализация функции remove}, label=lst:remove]
+static void mouse_disconnect(struct hid_device* hdev)
+{
+    hid_hw_stop(hdev);
+}
+\end{lstlisting}
+
+На листинге \ref{lst:rawevent} представлена реализация функции raw\_event.
+
+\begin{lstlisting}[caption={Реализация функции raw\_event}, label=lst:rawevent]
+static int mouse_hid_input(struct hid_device* hdev, struct hid_report* report, u8* data, int size)
+{
+    struct mouse_sc* sc = hid_get_drvdata(hdev);
+
+    if (sc->is_natural_scrolling == 1 && size > 0) {
+        if (data[size - 1] == 0xFF) {
+            data[size - 1] = 0x01;
+        }
+        else if (data[size - 1] == 0x01) {
+            data[size - 1] = 0xFF;
+        }
+    }
+
+    return 0;
+}
+\end{lstlisting}
+
+На листинге \ref{lst:init} представлена реализация функции init для драйвера.
+
+\begin{lstlisting}[caption={Реализация функции init}, label=lst:init]
+static int __init custom_mouse_init(void)
+{
+    printk(KERN_INFO "Mouse module loaded\n");
+
+    int ret = hid_register_driver(&mouse_driver);
+    if (ret)
+        printk(KERN_ERR "Failed to register mouse driver: %d\n", ret);
+
+    return ret;
+}
+\end{lstlisting}
+
+\clearpage
+
+На листинге \ref{lst:exit} представлена реализация функции exit для драйвера.
+
+\begin{lstlisting}[caption={Реализация функции exit}, label=lst:exit]
+static void __exit custom_mouse_exit(void)
+{
+    printk(KERN_INFO "Mouse module unloaded\n");
+
+    hid_unregister_driver(&mouse_driver);
+}
+\end{lstlisting}
+
+
+\section{Makefile}
+
+На листинге \ref{lst:makefile} представлена реализация Makefile.
+
+\begin{lstlisting}[caption={Makefile}, label=lst:makefile]
+CONFIG_MODULE_SIG=n
+
+CURRENT = $(shell uname -r)
+KDIR = /lib/modules/$(CURRENT)/build
+PWD = $(shell pwd)
+
+obj-m := mouse_scrolling_module.o
+default: 
+				make -C $(KDIR) M=$(PWD) modules 
+clean: 
+				@rm -f *.o .*.cmd .*.flags *.mod.c *.order *.mod *.ko *.symvers 
+				@rm -f .*.*.cmd *~ *.*~ TODO.* .*.d
+				@rm -fR .tmp* 
+				@rm -rf .tmp_versions 
+disclean: clean 
+				@rm *.ko *.symversS
+\end{lstlisting}
+
+\chapter{Исследовательский раздел}
+
+\section{Демонстрация работы программы}
+
+На рисунке \ref{img:init} представлены логи загрузки драйвера в систему:
+
+\imgs{init}{h!}{0.55}{Логи при загрузке драйвера в систему}
+
+На рисунке \ref{img:scrolling} представлены логи при скроллинге мыши:
+
+\imgs{scrolling}{h!}{0.55}{Логи при скроллинге}
+
+На рисунке \ref{img:exit} представлены логи при выгрузке драйвера из системы:
+
+\imgs{exit}{h!}{0.55}{Логи при выгрузке драйвера из системы}
+
+\clearpage
+
+
+\chapter*{ЗАКЛЮЧЕНИЕ}
+\addcontentsline{toc}{chapter}{ЗАКЛЮЧЕНИЕ}
+
+В результате выполнения курсовой работы был разработан драйвер, позволяющий 
+настраивать направление скроллинга USB-мыши.
+
+В ходе написания работы были решены поставленные задачи:
+
+\begin{itemize}
+	\item проведен анализ основных принципов работы мыши;
+	\item проведен анализ структуры драйвера мыши;
+	\item проведен анализ существующих способов изменения направления скроллинга мыши;
+	\item разработаны алгоритмы и структура программного обеспечения;
+	\item проведен анализ работы разработанного программного обеспечения.
+\end{itemize}
+
+Цель работы достигнута.
+
+
+\clearpage
+\makebibliography
+
+\chapter*{ПРИЛОЖЕНИЕ А}
+\addcontentsline{toc}{chapter}{ПРИЛОЖЕНИЕ А}
+
+На листинге \ref{lst:prill} представлен код загружаемого модуля ядра, реализующий
+драйвер мыши.
+
+
+\begin{lstlisting}[caption={Загружаемый модуль ядра реализующий драйвер мыши}, label=lst:prill]
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/usb.h>
+#include <linux/hid.h>
+#include <linux/hiddev.h>
+#include <linux/input.h>
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Artemev Ilya Olegovich");
+MODULE_DESCRIPTION("Module for changing the scrolling direction of a USB mouse");
+
+#define VENDOR_A4TECH       0x09da
+#define PRODUCT_A4TECH      0xfae3
+
+#define SETTINGS_SIZE       20
+#define SETTINGS_PATH       "/media/psf/iCloud/Downloads/os-cg/src/settings.txt"
+
+struct mouse_sc {
+    struct hid_device* hdev;
+    int is_natural_scrolling;
+};
+
+static int get_scrolling_value(const char* filepath)
+{
+    char settings[SETTINGS_SIZE];
+    struct file* file;
+    loff_t pos = 0;
+    int bytes_read;
+
+
+    file = filp_open(filepath, O_RDONLY, 0);
+    if (IS_ERR(file)) {
+        printk(KERN_ERR "Can't open file\n");
+        return -ENOENT;
+    }
+
+    vfs_llseek(file, pos, SEEK_SET);
+    bytes_read = kernel_read(file, settings, sizeof(settings), &pos);
+    filp_close(file, NULL);
+
+    int is_natural_scrolling = -1;
+
+    if (bytes_read > 0) {
+        char* found = strstr(settings, "Natural scrolling: ");
+        if (found != NULL) {
+            found += strlen("Natural scrolling: ");
+            is_natural_scrolling = *found - '0';
+        }
+    }
+
+    printk(KERN_INFO "is_natural_scrolling: %d\n", is_natural_scrolling);
+
+    return is_natural_scrolling;
+}
+
+static int mouse_hid_input(struct hid_device* hdev, struct hid_report* report, u8* data, int size)
+{
+    struct mouse_sc* sc = hid_get_drvdata(hdev);
+
+    printk(KERN_INFO "is_natural_scrolling: %d\n", sc->is_natural_scrolling);
+
+    if (sc->is_natural_scrolling == 1 && size > 0) {
+        if (data[size - 1] == 0xFF) {
+            printk(KERN_INFO "Scrolling down changed to scrolling up\n");
+            data[size - 1] = 0x01;
+        }
+        else if (data[size - 1] == 0x01) {
+            printk(KERN_INFO "Scrolling up changed to scrolling down\n");
+            data[size - 1] = 0xFF;
+        }
+    }
+
+    return 0;
+}
+
+static int mouse_probe(struct hid_device* hdev, const struct hid_device_id* id)
+{
+    int ret;
+    struct mouse_sc* sc;
+
+    sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
+    if (sc == NULL) {
+        return -ENOMEM;
+    }
+
+    sc->hdev = hdev;
+    sc->is_natural_scrolling = get_scrolling_value(SETTINGS_PATH);
+
+    hid_set_drvdata(hdev, sc);
+
+    ret = hid_parse(hdev);
+    if (ret)
+    {
+        hid_err(hdev, "parse faild\n");
+        return ret;
+    }
+
+    ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+    if (ret) {
+        hid_err(hdev, "hw start failed\n");
+        return ret;
+    }
+
+    printk(KERN_WARNING "Connect driver\n");
+
+    return 0;
+}
+
+static void mouse_disconnect(struct hid_device* hdev)
+{
+    printk(KERN_INFO "Device was disconnected\n");
+    hid_hw_stop(hdev);
+}
+
+static struct hid_device_id mouse_table[] = {
+    { HID_USB_DEVICE(VENDOR_A4TECH, PRODUCT_A4TECH) },
+    {}
+};
+MODULE_DEVICE_TABLE(hid, mouse_table);
+
+static struct hid_driver mouse_driver = {
+    .name = "custom_mouse_driver",
+    .id_table = mouse_table,
+    .probe = mouse_probe,
+    .remove = mouse_disconnect,
+    .raw_event = mouse_hid_input,
+};
+
+static int __init custom_mouse_init(void)
+{
+    printk(KERN_INFO "Mouse module loaded\n");
+
+    int ret = hid_register_driver(&mouse_driver);
+    if (ret)
+        printk(KERN_ERR "Failed to register mouse driver: %d\n", ret);
+
+    return ret;
+}
+
+static void __exit custom_mouse_exit(void)
+{
+    printk(KERN_INFO "Mouse module unloaded\n");
+
+    hid_unregister_driver(&mouse_driver);
+}
+
+module_init(custom_mouse_init);
+module_exit(custom_mouse_exit);
+\end{lstlisting}
+
+
+% 3 ms дефолт
+% 1 ms индексы
+% 0.09 ms материализованная вьюха
+% 3.5 ms предвыборка
+
+% \include{01-definitions}
+% \include{02-abbreviations}
+
+% \include{03-introduction}
+% \include{04-analysis}
+% \include{05-design}
+% \include{06-implementation}
+% \include{07-research}
+% \include{08-conclusion}
+
+% \include{09-appendix}
+
+\end{document}

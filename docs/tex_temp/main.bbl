@@ -1,0 +1,66 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{ryazanov2023}{article}{}
+      \name{author}{2}{}{%
+        {{hash=b34c181a33e48939006203442e5058b8}{%
+           family={Рязанова},
+           familyi={Р\bibinitperiod},
+           given={Н.Ю.},
+           giveni={Н\bibinitperiod}}}%
+        {{hash=4e3c986bfeb31450fcd22d846b9b71ab}{%
+           family={Сикорский},
+           familyi={С\bibinitperiod},
+           given={О.С.},
+           giveni={О\bibinitperiod}}}%
+      }
+      \strng{namehash}{b96bcd7ecf384a841460ccce453db349}
+      \strng{fullhash}{b96bcd7ecf384a841460ccce453db349}
+      \strng{bibnamehash}{b96bcd7ecf384a841460ccce453db349}
+      \strng{authorbibnamehash}{b96bcd7ecf384a841460ccce453db349}
+      \strng{authornamehash}{b96bcd7ecf384a841460ccce453db349}
+      \strng{authorfullhash}{b96bcd7ecf384a841460ccce453db349}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Новые информационные технологии в автоматизированных системах}
+      \field{title}{Метод изменения поведения HID-устройств под управлением ОС Linux}
+      \field{year}{2018}
+    \endentry
+    \entry{c}{misc}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Режим доступа: \url{https://www.iso.org/standard/17782.html} (дата обращения: 25.12.2022)}
+      \field{title}{ISO/IEC 9899:1990 Programming languages --- C [Электронный ресурс]}
+    \endentry
+    \entry{vscode}{misc}{}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Режим доступа: \url{https://code.visualstudio.com/} (дата обращения: 25.12.2022)}
+      \field{title}{Visual Studio Code [Электронный ресурс]}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
